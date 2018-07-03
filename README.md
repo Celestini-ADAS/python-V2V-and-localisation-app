@@ -3,7 +3,7 @@ Project back end taken from : https://github.com/maddevsio/mad-location-manager
 
 The original app was supposed to measure the distance covered.
 This version has been modified slightly to cater to my needs. I needed the filtered position, speed and bearing.
-I removed the certain files that i didn't need at all, like Loggers (front end). 
+I removed the files that i didn't need at all, like Loggers (front end). 
 I increased the frequency of the sensors to 100Hz (no delay) in order to improve localization (faster convergence) though it does
 consume a little more battery power. 
 The app currently prints the filtered coordinates, speed and bearing.
