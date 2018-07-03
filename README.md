@@ -1,3 +1,18 @@
+Project back end taken from : https://github.com/maddevsio/mad-location-manager 
+(did not fork it because by the time i figured that it would be better to just fork it i had already made a loooot of changes to a loooot of files).
+
+The original app was supposed to measure the distance covered.
+This version has been modified slightly to cater to my needs. I needed the filtered position, speed and bearing.
+I removed the certain files that i didn't need at all, like Loggers (front end). 
+I increased the frequency of the sensors to 100Hz (no delay) in order to improve localization (faster convergence) though it does
+consume a little more battery power. 
+The app currently prints the filtered coordinates, speed and bearing.
+Further performance improvements will be made in the coming weeks
+
+The excellent back end has been written by this guy->https://github.com/maddevsio . Kudos to him.
+Front end could've been a little more "organized". Gave me a hard time trying to access the position,speed and bearing from the front end(at a fast rate). Then again, it could have been the case simply because I was new to android when I started working on this. 
+
+
 # mad-location-manager 
 This is library for GPS and Accelerometer data "fusion" with Kalman filter. 
 Project consists of 2 parts: GpsAccelerationKalmanFusion (AAR module) and 2 helper applications. Main thing here is GpsAccelerationKalmanFusion module.
