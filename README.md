@@ -12,6 +12,7 @@ Further performance improvements will be made in the coming weeks
 The excellent back end has been written by this guy->https://github.com/maddevsio . Kudos to him.
 Front end could've been a little more "organized". Gave me a hard time trying to access the position,speed and bearing from the front end(at a fast rate). Then again, it could have been the case simply because I was new to android when I started working on this. 
 
+//============ the rest of the readme is all him ===============
 
 # mad-location-manager 
 This is library for GPS and Accelerometer data "fusion" with Kalman filter. 
