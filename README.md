@@ -1,4 +1,7 @@
-Project back end taken from : https://github.com/maddevsio/mad-location-manager 
+The files ADAS.py, COMS.py and vision.py run on the OBU while the android code runs on a phone. please separate the codes when running locally. The scripts have been put in the same repository only for the sake of convenience.
+
+
+Android Project back end taken from : https://github.com/maddevsio/mad-location-manager 
 (did not fork it because by the time i figured that it would be better to just fork it i had already made a loooot of changes to a loooot of files).
 
 The original app was supposed to measure the distance covered.
