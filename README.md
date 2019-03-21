@@ -1,11 +1,8 @@
 The files ADAS.py, COMS.py and vision.py run on the OBU while the android code runs on a phone. please separate the codes when running locally. The scripts have been put in the same repository only for the sake of convenience.
 
-# Smartphone end : 
-Android Project back end taken from : https://github.com/maddevsio/mad-location-manager 
-The app prints and sends the filtered coordinates, speed and heading over the micro-usb port through an OTG to the raspberry pi
 
-# OBU end: 
-# ADAS
+# OBU : 
+## ADAS
 An alert generation-transmission system for vehicles. https://www.youtube.com/watch?v=PU8L8YUw1JM
 The android part of this project is in the repository "GPS-IMU" https://github.com/Celestini-Lucifer/GPS-IMU-android-Alert
 
@@ -19,7 +16,7 @@ numpy (pip install numpy)
 
 serial (pip install pyserial)
 
-# WHAT IT DOES:
+## how it works:
 ->The ADAS.py file is the main file which uses the vision.py and COMS.py files. 
 ADAS.py is supposed to generate an alert for the user when the vision component(vision.py) detects a threat(collision iminent) or sudden braking(by leveraging the sensors in the mobile) and is supposed to broadcast an alert using communications back end(COMS.py, can use any transceiver that works on UART protocol). 
 
@@ -29,14 +26,16 @@ ADAS.py is supposed to generate an alert for the user when the vision component(
 
 ->COMS.py is a communications back end (not really that complex or sophisticated if you take a peek, it just makes our job easier, thats it) which can handle UART communications. It has been tested for xbees in transparent mode and for RF APC220s. Look into ADAS.py for understanding how to use them.
 
-# Further developments : 
+## Further developments : 
 -> refining the system hardware.
 -> frequency hopping for different message types.
 -> This project is currently being integrated into a mini self driving car project to tinker with the possibilities of combining V2V communication into autonomous cars https://github.com/naughtyStark/Self-driving-car-STM-32
 
+# Smartphone end : 
+Android Project back end taken from : https://github.com/maddevsio/mad-location-manager 
+The app prints and sends the filtered coordinates, speed and heading over the micro-usb port through an OTG to the raspberry pi.
 
-//============ the rest of the readme is all him ===============
-
+The following is the readme of the original android project which was used for it's backend in our project. It is included for reference as well as installation instructions if you get stuck.
 # mad-location-manager 
 This is library for GPS and Accelerometer data "fusion" with Kalman filter. 
 Project consists of 2 parts: GpsAccelerationKalmanFusion (AAR module) and 2 helper applications. Main thing here is GpsAccelerationKalmanFusion module.
@@ -63,84 +62,6 @@ Use last version from link below (jitpack):
 ## How to use
 There is example application in current repository called "Sensor Data Collector" . 
 
-### WARNING!!
-
-Right now these sensors should be available:
-TYPE_ROTATION_VECTOR, TYPE_LINEAR_ACCELERATION .
-
-It's possible to use just TYPE_ACCELEROMETER with high-pass filter. Also it's possible to use Madgwick filter instead of rotation vector, but gyroscope and magnetometer sensors should be available in that case.
-
-### KalmanLocationService
-
-This is main class. It implements data collecting and processing. You need to make several preparation steps for using it : 
-1. Add to application manifest this : 
-
-```
-<service
-            android:name="mad.location.manager.lib.Services.KalmanLocationService"
-            android:enabled="true"
-            android:exported="false"
-            android:stopWithTask="false" />
-```
-2. Create some class and implement LocationServiceInterface and optionally LocationServiceStatusInterface . 
-3. Register this class with ServicesHelper.addLocationServiceInterface(this) (do it in constructor for example)
-4. Handle locationChanged callback. There is Kalman filtered location WITHOUT geohash filtering. Example of geohash filtering is in MapPresenter class.
-5. Init location service settings object (or use standard one) and pass it to reset() function.
-
-#### Important things!
-It's recommended to use start(), stop() and reset() methods, because this service has internal state. Use start() method at the beginning of new route. Stop service when your application doesn't use locations data. That need to be done for decrease battery consumption. 
-
-### Kalman filter settings
-
-There are several settings for KalmanFilter. All of them stored in KalmanLocationService.Settings class. 
-
-- Acceleration deviation - this value controls process noise covariance matrix. In other words it's "trust level" of accelerometer data. Low value means that accelerometer data is more preferable. 
-- Gps min time	- minimum time interval between location updates, in milliseconds
-- Gps min distance - minimum distance between location updates, in meters
-- Sensor frequency in Herz - the rate sensor events are delivered at
-- GeoHash precision - length of geohash string (and precision)
-- GeoHash min point - count of points with same geohash. GPS point becomes valid only when count greater then this value. 
-- Logger - if you need to log something to file just implement ILogger interface and initialize settings with that object. If you don't need that - just pass null . 
-
-There is an example in MainActivity class how to use logger and settings.
-
-### GeoHashRTFilter
-
-There are 2 ways of using GeoHash real-time filter : 
-* It could be used as part of KalmanLocationService. It will work inside that thread and will be used by service. But then you need to use start(), stop() and reset() methods. 
-* It could be used as external component and filter Location objects from any source (not only from KalmanLocationService). You need to reset it before using and then use method filter() .
-
-It will calculate distance in 2 ways : Vincenty and haversine formula . Both of them show good results so maybe we will add some flag for choose. 
-
-
-## The roadmap
-### Visualizer 
-
-- [x] Implement some route visualizer for desktop application
-- [x] Implement Kalman filter and test all settings
-- [x] Implement noise generator for logged data
-- [ ] Improve UI. Need to use some controls for coefficient/noise changes
-
-### Filter 
-
-- [x] Implement GeoHash function
-- [x] Get device orientation
-	- [x] Get device orientation using magnetometer and accelerometer + android sensor manager
-	- [x] Get device orientation using magnetometer, accelerometer and gyroscope + Madgwick AHRS
-	- [x] Get device orientation using rotation vector virtual sensor
-- [x] Compare result device orientation and choose most stable one
-- [x] Get linear acceleration of device (acceleration without gravity force)
-- [x] Convert relative linear acceleration axis to absolute coordinate system (east/north/up)
-- [x] Implement Kalman filter core
-- [x] Implement Kalman filter for accelerometer and gps data "fusion"
-- [x] Logger for pure GPS data, acceleration data and filtered GPS data.
-- [ ] Restore route if gps connection is lost
-
-### Library
-
-- [x] Separate test android application and library
-- [x] Add library to some public repository
-
 ## Theory
 
 Kalman filtering, also known as linear quadratic estimation (LQE), is an algorithm that uses a series of measurements observed over time, containing statistical noise and other inaccuracies, and produces estimates of unknown variables that tend to be more accurate than those based on a single measurement alone, by estimating a joint probability distribution over the variables for each timeframe.
@@ -159,10 +80,6 @@ So first - we need to define matrices and do some math with them. And second - w
 - Using virtual "rotation vector" sensor. 
 
 Best results show Madgwick filter and ROTATION_VECTOR sensor, but Madgwick filter should be used when we know sensor frequency. Android doesn't provide such information. We can set minimum frequency, but it could be much higher then specified. Also we need to provide gain coefficient for each device. So best solution here is to use virtual ROTATION_VECTOR sensor. You can get more details from current project's wiki.
-
-## Issues
-
-Feel free to send pull requests. Also feel free to create issues.
 
 ## License
 
