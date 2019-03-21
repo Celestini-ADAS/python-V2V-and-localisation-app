@@ -1,19 +1,39 @@
 The files ADAS.py, COMS.py and vision.py run on the OBU while the android code runs on a phone. please separate the codes when running locally. The scripts have been put in the same repository only for the sake of convenience.
 
-
+# Smartphone end : 
 Android Project back end taken from : https://github.com/maddevsio/mad-location-manager 
-(did not fork it because by the time i figured that it would be better to just fork it i had already made a loooot of changes to a loooot of files).
+The app prints and sends the filtered coordinates, speed and heading over the micro-usb port through an OTG to the raspberry pi
 
-The original app was supposed to measure the distance covered.
-This version has been modified slightly to cater to my needs. I needed the filtered position, speed and bearing.
-I removed the files that i didn't need at all, like Loggers (front end). 
-I increased the frequency of the sensors to 100Hz (no delay) in order to improve localization (faster convergence) though it does
-consume a little more battery power. 
-The app currently prints the filtered coordinates, speed and bearing.
-Further performance improvements will be made in the coming weeks
+# OBU end: 
+# ADAS
+An alert generation-transmission system for vehicles. https://www.youtube.com/watch?v=PU8L8YUw1JM
+The android part of this project is in the repository "GPS-IMU" https://github.com/Celestini-Lucifer/GPS-IMU-android-Alert
 
-The excellent back end has been written by this guy->https://github.com/maddevsio . Kudos to him.
-Front end could've been a little more "organized". Gave me a hard time trying to access the position,speed and bearing from the front end(at a fast rate). Then again, it could have been the case simply because I was new to android when I started working on this. 
+The ADAS project is meant to run on a raspi.
+
+external dependencies : 
+
+opencv (2.4 or better) (pip install python-opencv-3.2.0)
+
+numpy (pip install numpy)
+
+serial (pip install pyserial)
+
+# WHAT IT DOES:
+->The ADAS.py file is the main file which uses the vision.py and COMS.py files. 
+ADAS.py is supposed to generate an alert for the user when the vision component(vision.py) detects a threat(collision iminent) or sudden braking(by leveraging the sensors in the mobile) and is supposed to broadcast an alert using communications back end(COMS.py, can use any transceiver that works on UART protocol). 
+
+->ADAS.py also checks for the relevance of a received alert. An alert is considered relevant if it is coming from a car in front of us moving in the same direction and on the same road. 
+
+->vision.py : determines whether there is a threat in a given frame by taking the image as well as the optical flow of the image as an input parameter. It generates an alert if there is a large (car-size large) object appearing to move towards the bottom center of the image. This method is highly sensitive to lighting conditions and camera position and orientation. The method also generates false positives when the car goes over a bump on the road.
+
+->COMS.py is a communications back end (not really that complex or sophisticated if you take a peek, it just makes our job easier, thats it) which can handle UART communications. It has been tested for xbees in transparent mode and for RF APC220s. Look into ADAS.py for understanding how to use them.
+
+# Further developments : 
+-> refining the system hardware.
+-> frequency hopping for different message types.
+-> This project is currently being integrated into a mini self driving car project to tinker with the possibilities of combining V2V communication into autonomous cars https://github.com/naughtyStark/Self-driving-car-STM-32
+
 
 //============ the rest of the readme is all him ===============
 
